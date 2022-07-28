@@ -342,6 +342,10 @@ static void SetSys (const char* Sys)
             NewSymbol ("__SYM1__", 1);
             break;
 
+        case TGT_BE6502:
+            NewSymbol ("__BE6502__", 1);
+            break;
+
         default:
             AbEnd ("Invalid target name: '%s'", Sys);
 

@@ -2,7 +2,10 @@
 ; crt0.s
 ; ---------------------------------------------------------------------------
 ;
-; Startup code for cc65 (Single Board Computer version)
+; Startup code for cc65 (Ben Eater 6502 version)
+
+
+.PC02		; be6502 uses WDC65C02
 
 .export   _init, _exit
 .import   _main
@@ -50,9 +53,7 @@ _init:    LDX     #$FF                 ; Initialize stack pointer to $FF
 ; Back from main (this is also the _exit entry):  force a software break
 
 _exit:    JSR     donelib              ; Run destructors
-	  ; TODO: Remove STP (0xCB) instruction implemented in fakeBE6502 and handle BRK properly
-	  .byte $CB
-          BRK
+          STP
 
 
 ; ---------------------------------------------------------------------------
@@ -70,11 +71,9 @@ _nmi_int:  RTI                    ; Return from all NMI interrupts
 ; ---------------------------------------------------------------------------
 ; Maskable interrupt (IRQ) service routine
 
-_irq_int:  RTI
-           PHA                    ; Save accumulator contents to stack
-           TXA
-           PHA                    ; Save X register contents to stack
+_irq_int:  PHX                    ; Save X register contents to stack
            TSX                    ; Transfer stack pointer to X
+           PHA                    ; Save accumulator contents to stack
            INX                    ; Increment X so it points to the status
            INX                    ;   register value saved on the stack
            LDA $100,X             ; Load status register contents
@@ -84,16 +83,19 @@ _irq_int:  RTI
 ; ---------------------------------------------------------------------------
 ; IRQ detected, return
 
-irq:       PLA                    ; Restore X register contents
-           TAX
+irq:       
            PLA                    ; Restore accumulator contents
+           PLX                    ; Restore X register contents
            RTI                    ; Return from all IRQ interrupts
 
 ; ---------------------------------------------------------------------------
-; BRK detected, stop
+; BRK detected, return
 
-break:     JMP break              ; If BRK is detected, something very bad
-                                  ;   has happened, so stop running
+break:     
+           PLA                    ; Restore accumulator contents
+           PLX                    ; Restore X register contents
+           RTI                    ; Return from all IRQ interrupts
+
 
 ; ---------------------------------------------------------------------------
 ; Defines the interrupt vector table.

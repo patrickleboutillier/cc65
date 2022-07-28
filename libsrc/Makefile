@@ -23,6 +23,7 @@ TARGETS = apple2       \
           atari5200    \
           atari7800    \
           atmos        \
+          be6502       \
           creativision \
           $(CBMS)      \
           $(GEOS)      \
