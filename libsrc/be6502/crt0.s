@@ -5,7 +5,7 @@
 ; Startup code for cc65 (Ben Eater 6502 version)
 
 
-.PC02		; be6502 uses WDC65C02
+.PC02     ; be6502 uses WDC65C02
 
 .export   _init, _exit
 .import   _main
@@ -73,6 +73,7 @@ _nmi_int:  RTI                    ; Return from all NMI interrupts
 
 _irq_int:  PHX                    ; Save X register contents to stack
            TSX                    ; Transfer stack pointer to X
+           PHY                    ; Save Y register contents to stack
            PHA                    ; Save accumulator contents to stack
            INX                    ; Increment X so it points to the status
            INX                    ;   register value saved on the stack
@@ -83,16 +84,16 @@ _irq_int:  PHX                    ; Save X register contents to stack
 ; ---------------------------------------------------------------------------
 ; IRQ detected, return
 
-irq:       
-           PLA                    ; Restore accumulator contents
+irq:       PLA                    ; Restore accumulator contents
+           PLY                    ; Restore Y register contents
            PLX                    ; Restore X register contents
            RTI                    ; Return from all IRQ interrupts
 
 ; ---------------------------------------------------------------------------
 ; BRK detected, return
 
-break:     
-           PLA                    ; Restore accumulator contents
+break:     PLA                    ; Restore accumulator contents
+           PLY                    ; Restore Y register contents
            PLX                    ; Restore X register contents
            RTI                    ; Return from all IRQ interrupts
 
