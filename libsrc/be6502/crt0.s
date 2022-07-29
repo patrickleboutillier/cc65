@@ -7,7 +7,7 @@
 
 .PC02     ; be6502 uses WDC65C02
 
-.export   _init, _exit
+.export   _exit
 .import   _main
 
 .export   __STARTUP__ : absolute = 1        ; Mark as startup
