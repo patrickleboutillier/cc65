@@ -29,7 +29,7 @@ cc65 generated programs with the default setup have a usable ROM range of &dolla
 Special locations:
 <descrip>
   <tag/IO/
-  The IO device (WSD65C22) is mapped starting at &dollar;6000.
+  The IO device (WDC65C22) is mapped starting at &dollar;6000.
 
   <tag/RAM/
   The RAM range is &dollar;0200 - &dollar;3FFF. 
