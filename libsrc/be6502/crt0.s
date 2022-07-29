@@ -16,6 +16,7 @@
 .import    copydata, zerobss, initlib, donelib
 
 .include  "zeropage.inc"
+.include  "be6502.inc"
 
 ; ---------------------------------------------------------------------------
 ; Place the startup code in a special segment
@@ -96,7 +97,6 @@ break:     PLA                    ; Restore accumulator contents
            PLY                    ; Restore Y register contents
            PLX                    ; Restore X register contents
            RTI                    ; Return from all IRQ interrupts
-
 
 ; ---------------------------------------------------------------------------
 ; Defines the interrupt vector table.
