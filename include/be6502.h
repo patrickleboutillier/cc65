@@ -29,9 +29,10 @@
 /*****************************************************************************/
 
 
-
 #ifndef _BE6502_H
 #define _BE6502_H
+
+#include <stdint.h>
 
 /* Check for errors */
 #if !defined(__BE6502__)
@@ -42,6 +43,17 @@ extern uint8_t PORTA ;
 extern uint8_t PORTB ;
 extern uint8_t DDRA ;
 extern uint8_t DDRB ;
+
+
+#define LCD_E    0b10000000
+#define LCD_RW   0b01000000
+#define LCD_RS   0b00100000
+
+void __fastcall__ lcd_init() ;
+void __fastcall__ lcd_wait() ;
+void __fastcall__ lcd_instruction(uint8_t) ;
+void __fastcall__ lcd_print(char c) ;
+
 
 /* End of be6502.h */
 #endif

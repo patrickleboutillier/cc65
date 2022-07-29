@@ -1,8 +1,12 @@
 ; be6502 symbols
 
-.export _PORTB, _PORTA, _DDRB, _DDRA
 
 _PORTB = $6000
 _PORTA = $6001
 _DDRB  = $6002
 _DDRA  = $6003
+
+
+LCD_E  = %10000000
+LCD_RW = %01000000
+LCD_RS = %00100000

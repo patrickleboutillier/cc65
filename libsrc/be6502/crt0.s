@@ -17,6 +17,8 @@
 
 .include  "zeropage.inc"
 .include  "be6502.inc"
+.export _PORTB, _PORTA, _DDRB, _DDRA
+
 
 ; ---------------------------------------------------------------------------
 ; Place the startup code in a special segment
