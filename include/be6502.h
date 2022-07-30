@@ -43,17 +43,35 @@ extern uint8_t PORTA ;
 extern uint8_t PORTB ;
 extern uint8_t DDRA ;
 extern uint8_t DDRB ;
+extern uint8_t T1CL ;
+extern uint8_t T1CH ;
+extern uint8_t T1LL ;
+extern uint8_t T1LH ;
+extern uint8_t T2CL ;
+extern uint8_t T2CH ;
+extern uint8_t SR ;
+extern uint8_t ACR ;
+extern uint8_t PCR ; 
+extern uint8_t IFR ;
+extern uint8_t IER ;
 
 
+/* LCD functions */
 #define LCD_E    0b10000000
 #define LCD_RW   0b01000000
 #define LCD_RS   0b00100000
 
-/* LCD functions */
 void __fastcall__ lcd_init() ;
 void __fastcall__ lcd_wait() ;
 void __fastcall__ lcd_instruction(uint8_t) ;
 void __fastcall__ lcd_print(char c) ;
+
+
+/* Timer symbols */
+extern unsigned long timer_ticks ;
+void timer_irq_int() ;
+void __fastcall__ timer_init() ;
+
 
 /* Interrupt function pointers. You can use these to set different interrupt handlers .
    Note: These handlers MUST be assembly labels, NOT C functions! */
@@ -61,8 +79,8 @@ extern void (*nmi_int_fptr)() ;
 extern void (*irq_int_fptr)() ;
 
 /* Default interrupt functions (which do nothing). The pointers above point to these at startup. */
-void nmi_int_def() ;
-void irq_int_def() ;
+void def_nmi_int() ;
+void def_irq_int() ;
 
 /* End of be6502.h */
 #endif

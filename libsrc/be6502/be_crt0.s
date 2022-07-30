@@ -5,20 +5,17 @@
 ; Startup code for cc65 (Ben Eater 6502 version)
 
 
-.PC02     ; be6502 uses WDC65C02
-
 .import   _main
 .import   nmi_int_bs, irq_int_bs
 
 .export   __STARTUP__ : absolute = 1        ; Mark as startup
 .import   __RAM_START__, __RAM_SIZE__       ; Linker generated
-
-.include  "zeropage.inc"
 .import    copydata, zerobss, initlib, donelib
 
-.include  "be6502.inc"
-.export _PORTB, _PORTA, _DDRB, _DDRA
+.include  "zeropage.inc"
 
+.include  "be6502.inc"
+.export _PORTB, _PORTA, _DDRB, _DDRA, _T1CL, _T1CH, _T1LL, _T1LH, _T2CL, _T2CH, _SR, _ACR, _PCR, _IFR, _IER
 
 ; ---------------------------------------------------------------------------
 ; Place the startup code in a special segment
@@ -56,7 +53,7 @@ reset:     LDX     #$FF                 ; Initialize stack pointer to $FF
 ; Back from main (this is also the _exit entry):  force a software break
 
 _exit:    JSR     donelib              ; Run destructors
-          STP
+          .byte   $DB                  ; TODO: Simulate a STP instruction since we are in 6502 mode
 
 
 ; ---------------------------------------------------------------------------
