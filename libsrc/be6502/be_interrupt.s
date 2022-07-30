@@ -10,7 +10,7 @@ _irq_int_fptr:  .addr _irq_int_def
 
 .segment  "CODE"
 
-; Interrupt bootstrap handlers. Just jump to the address in the pointers. 
+; Interrupt bootstrap handlers. Just jump to the address in the pointers.
 nmi_int_bs:   jmp(_nmi_int_fptr)
 irq_int_bs:   jmp(_irq_int_fptr)
 
