@@ -5,7 +5,9 @@ _PORTB = $6000
 _PORTA = $6001
 _DDRB  = $6002
 _DDRA  = $6003
-
+_PCR   = $600c
+_IFR   = $600d
+_IER   = $600e
 
 LCD_E  = %10000000
 LCD_RW = %01000000
