@@ -49,11 +49,20 @@ extern uint8_t DDRB ;
 #define LCD_RW   0b01000000
 #define LCD_RS   0b00100000
 
+/* LCD functions */
 void __fastcall__ lcd_init() ;
 void __fastcall__ lcd_wait() ;
 void __fastcall__ lcd_instruction(uint8_t) ;
 void __fastcall__ lcd_print(char c) ;
 
+/* Interrupt function pointers. You can use these to set different interrupt handlers .
+   Note: These handlers MUST be assembly labels, NOT C functions! */
+extern void (*nmi_int_fptr)() ;
+extern void (*irq_int_fptr)() ;
+
+/* Default interrupt functions (which do nothing). The pointers above point to these at startup. */
+void nmi_int_def() ;
+void irq_int_def() ;
 
 /* End of be6502.h */
 #endif

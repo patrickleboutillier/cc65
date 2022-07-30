@@ -7,7 +7,7 @@
 
 .PC02     ; be6502 uses WDC65C02
 
-.export   _exit
+.export   _exit, _nmi_int_fptr, _nmi_int_def, _irq_int_fptr, _irq_int_def
 .import   _main
 
 .export   __STARTUP__ : absolute = 1        ; Mark as startup
@@ -64,31 +64,27 @@ _exit:    JSR     donelib              ; Run destructors
 ;
 ; Checks for a BRK instruction and returns from all valid interrupts.
 
-.segment  "CODE"
-
 ; ---------------------------------------------------------------------------
 ; Non-maskable interrupt (NMI) service routine
 
-_nmi_int:  RTI                    ; Return from all NMI interrupts
+_nmi_int_def:  RTI                    ; Return from all NMI interrupts
 
 ; ---------------------------------------------------------------------------
 ; Maskable interrupt (IRQ) service routine
 
-_irq_int:  PHX                    ; Save X register contents to stack
-           TSX                    ; Transfer stack pointer to X
-           PHY                    ; Save Y register contents to stack
-           PHA                    ; Save accumulator contents to stack
-           INX                    ; Increment X so it points to the status
-           INX                    ;   register value saved on the stack
-           LDA $100,X             ; Load status register contents
-           AND #$10               ; Isolate B status bit
-           BNE break              ; If B = 1, BRK detected
+_irq_int_def:  PHX                    ; Save X register contents to stack
+               TSX                    ; Transfer stack pointer to X
+               PHA                    ; Save accumulator contents to stack
+               INX                    ; Increment X so it points to the status
+               INX                    ;   register value saved on the stack
+               LDA $100,X             ; Load status register contents
+               AND #$10               ; Isolate B status bit
+               BNE break              ; If B = 1, BRK detected
 
 ; ---------------------------------------------------------------------------
 ; IRQ detected, return
 
 irq:       PLA                    ; Restore accumulator contents
-           PLY                    ; Restore Y register contents
            PLX                    ; Restore X register contents
            RTI                    ; Return from all IRQ interrupts
 
@@ -96,15 +92,26 @@ irq:       PLA                    ; Restore accumulator contents
 ; BRK detected, return
 
 break:     PLA                    ; Restore accumulator contents
-           PLY                    ; Restore Y register contents
            PLX                    ; Restore X register contents
            RTI                    ; Return from all IRQ interrupts
 
 ; ---------------------------------------------------------------------------
 ; Defines the interrupt vector table.
 
+; Pointers to the interrupt handlers
+.segment  "DATA"
+
+_nmi_int_fptr:  .addr _nmi_int_def
+_irq_int_fptr:  .addr _irq_int_def
+
+.segment  "CODE"
+
+; Interrupt bootstrap handlers. Just jump to the address in the pointers. 
+_nmi_int_bs:   jmp(_nmi_int_fptr)
+_irq_int_bs:   jmp(_irq_int_fptr)
+
 .segment  "VECTORS"
 
-.addr      _nmi_int    ; NMI vector
-.addr      _init       ; Reset vector
-.addr      _irq_int    ; IRQ/BRK vector
+.addr      _nmi_int_bs    ; NMI vector bootstrap
+.addr      _init          ; Reset vector
+.addr      _irq_int_bs    ; IRQ/BRK vector bootstrap
