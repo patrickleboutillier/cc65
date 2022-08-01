@@ -60,7 +60,8 @@ allow access to hardware located in the IO address space.
 </descrip><p>
 
 <sect1>LCD functions<p>
-A few simple functions are available to control the LCD display:
+A few simple functions are available to control the LCD display. There are basically the functions created by Ben 
+in the videos:
 <itemize>
 <item><tt/void lcd_init()/
 <item><tt/void lcd_wait()/
