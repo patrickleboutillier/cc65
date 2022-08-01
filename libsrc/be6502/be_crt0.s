@@ -53,7 +53,7 @@ reset:     LDX     #$FF                 ; Initialize stack pointer to $FF
 ; Back from main (this is also the _exit entry):  force a software break
 
 _exit:    JSR     donelib              ; Run destructors
-          .byte   $DB                  ; TODO: Simulate a STP instruction since we are in 6502 mode
+          STP
 
 
 ; ---------------------------------------------------------------------------
